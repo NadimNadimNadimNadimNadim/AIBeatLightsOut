@@ -28,12 +28,8 @@ namespace AIBeatLightsOut
     {
         public override int Heuristic(Node x)
         {
-            var sum = 0;
-            foreach (var item in x.State.Board)
-            {
-                if (item) sum++;
-            }
-            return sum / 5;
+
+            return x.SquaresCount / 5;
         }
     }
     class NodeComparer : IEqualityComparer<Node>
@@ -66,7 +62,6 @@ namespace AIBeatLightsOut
                         list.Add(new Point(i, j));
                     }
                 }
-                // Shuffle(list);
                 return list;
             }
         }
@@ -82,22 +77,6 @@ namespace AIBeatLightsOut
             }
             var node = new Node(start, 0);
             Open.Add(node);
-        }
-        public static void Shuffle<T>(System.Collections.Generic.IList<T> list)
-        {
-            RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
-            int n = list.Count;
-            while (n > 1)
-            {
-                byte[] box = new byte[1];
-                do provider.GetBytes(box);
-                while (!(box[0] < n * (Byte.MaxValue / n)));
-                int k = (box[0] % n);
-                n--;
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
         }
 
         public Stack<Point> Run()
@@ -137,11 +116,13 @@ namespace AIBeatLightsOut
         public Node Child { get; set; }
         public int Depth { get; set; }
         public Point Move { get; set; }
+        public int SquaresCount { get; }
 
         public Node(GameState state, int depth)
         {
             State = state;
             Depth = depth;
+            SquaresCount = GetCount(state);
         }
         public Node(Node parent, GameState state, Point move)
         {
@@ -149,6 +130,17 @@ namespace AIBeatLightsOut
             Parent = parent;
             Depth = parent.Depth + 1;
             Move = move;
+            SquaresCount = GetCount(state);
+        }
+
+        private int GetCount(GameState state)
+        {
+            var sum = 0;
+            foreach (var item in state.Board)
+            {
+                if (item) sum++;
+            }
+            return sum;
         }
 
     }
