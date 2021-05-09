@@ -88,9 +88,9 @@ namespace AIBeatLightsOut
                 if (Game.IsFinishState(node.State))
                 {
                     var stack = new Stack<Point>();
-                    while (node != null)
+                    while (node.Parent != null)
                     {
-                        stack.Push(node.Move);
+                        stack.Push(node.Parent.Move);
                         node = node.Parent;
                     }
                     return stack;
