@@ -90,7 +90,7 @@ namespace AIBeatLightsOut
                     var stack = new Stack<Point>();
                     while (node.Parent != null)
                     {
-                        stack.Push(node.Parent.Move);
+                        stack.Push(node.Move);
                         node = node.Parent;
                     }
                     return stack;
